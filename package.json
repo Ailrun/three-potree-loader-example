@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "@pix4d/three-potree-loader": "0.0.5",
-    "jquery": "^3.3.1",
     "three": "^0.91.0"
   },
   "devDependencies": {

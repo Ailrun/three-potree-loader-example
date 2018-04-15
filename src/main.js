@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import * as THREE from 'three';
 import * as threePotree from '@pix4d/three-potree-loader';
 
@@ -11,16 +10,18 @@ const serverConfig = {
   },
 };
 
-$(() => {
-  const el = $('#target')[0];
+main();
+
+function main() {
+  const el = document.getElementById('target');
 
   const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(0, 0);
-
   const camera = new THREE.PerspectiveCamera(90, NaN, 0.001, 100000);
-  const controls = new OrbitControls(camera, el);
+  const orbitControls = new OrbitControls(camera, el);
+  const scene = new THREE.Scene();
 
   updateSize(renderer, camera, el);
+  // Add resize listener
   window.addEventListener('resize', () => {
     updateSize(renderer, camera, el);
   });
@@ -29,29 +30,31 @@ $(() => {
 
   const potree = new threePotree.Potree();
 
-  const scene = new THREE.Scene();
+  load(serverConfig, potree, (pco) => {
+    camera.position.copy(pco.boundingBox.getCenter());
+    // Set valid direction of 'sky'
+    camera.up = new THREE.Vector3(0, 0, 1);
+    camera.lookAt(scene.position);
+    orbitControls.update();
+    scene.add(pco);
 
-  potree.loadPointCloud(serverConfig.cloudjs, serverConfig.makeURL)
+    render(renderer, scene, camera, potree, pco);
+  });
+}
+
+function load(config, potree, afterLoad) {
+  potree.loadPointCloud(config.cloudjs, config.makeURL)
     .then((pco) => {
       pco.material = new threePotree.PointCloudMaterial();
       pco.toTreeNode(pco.root);
 
       return pco;
     })
-    .then((pco) => {
-      camera.position.copy(pco.boundingBox.getCenter());
-      // Set valid direction of 'sky'
-      camera.up = new THREE.Vector3(0, 0, 1);
-      camera.lookAt(pco.pcoGeometry.tightBoundingBox.getCenter());
-      controls.update();
-      scene.add(pco);
-
-      render(renderer, scene, camera, potree, pco);
-    })
+    .then(afterLoad)
     .catch((err) => {
       console.error(err);
     });
-});
+}
 
 function render(renderer, scene, camera, potree, pco) {
   requestAnimationFrame(_render);
