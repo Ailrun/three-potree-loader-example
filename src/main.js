@@ -18,10 +18,6 @@ $(() => {
   renderer.setSize(0, 0);
 
   const camera = new THREE.PerspectiveCamera(90, NaN, 0.001, 100000);
-  camera.position.x = 292;
-  camera.position.y = 143;
-  camera.position.z = 364;
-
   const controls = new OrbitControls(camera, el);
 
   updateSize(renderer, camera, el);
@@ -47,6 +43,8 @@ $(() => {
       return pco;
     })
     .then((pco) => {
+      camera.position.copy(pco.pcoGeometry.tightBoundingBox.getCenter());
+      controls.update();
       scene.add(pco);
 
       render(renderer, scene, camera);
