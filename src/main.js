@@ -33,11 +33,7 @@ $(() => {
 
   potree.loadPointCloud(serverConfig.cloudjs, serverConfig.makeURL)
     .then((pco) => {
-      pco.material = new threePotree.PointCloudMaterial({
-        size: 3,
-        maxSize: 20,
-        minSize: 3,
-      });
+      pco.material = new threePotree.PointCloudMaterial();
       pco.toTreeNode(pco.root);
 
       return pco;
@@ -50,7 +46,7 @@ $(() => {
       controls.update();
       scene.add(pco);
 
-      render(renderer, scene, camera);
+      render(renderer, scene, camera, potree, pco);
     })
     .catch((err) => {
       console.error(err);
@@ -63,6 +59,9 @@ function render(renderer, scene, camera, potree, pco) {
   function _render() {
     requestAnimationFrame(_render);
 
+    potree.updatePointClouds([pco], camera, renderer);
+
+    renderer.clear();
     renderer.render(scene, camera);
   }
 }
