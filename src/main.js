@@ -3,7 +3,7 @@ import Rx from 'rxjs';
 import * as THREE from 'three';
 import * as threePotree from '@pix4d/three-potree-loader';
 
-import { OrbitControls } from './orbitcontrols';
+import { OrbitControls } from './lib/orbitControls';
 
 const serverConfig = {
   cloudjs: 'cloud.js',
