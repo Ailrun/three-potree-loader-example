@@ -1,0 +1,26 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "Example for how-to-use three-potree-loader",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode development --config config/webpack.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pix4d/three-potree-loader": "0.0.5",
+    "jquery": "^3.3.1",
+    "rxjs": "^5.5.10",
+    "three": "^0.91.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/preset-stage-0": "^7.0.0-beta.44",
+    "babel-loader": "^8.0.0-beta.2",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14",
+    "webpack-dev-server": "^3.1.3"
+  }
+}
