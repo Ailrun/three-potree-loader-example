@@ -43,7 +43,10 @@ $(() => {
       return pco;
     })
     .then((pco) => {
-      camera.position.copy(pco.pcoGeometry.tightBoundingBox.getCenter());
+      camera.position.copy(pco.boundingBox.getCenter());
+      // Set valid direction of 'sky'
+      camera.up = new THREE.Vector3(0, 0, 1);
+      camera.lookAt(pco.pcoGeometry.tightBoundingBox.getCenter());
       controls.update();
       scene.add(pco);
 
