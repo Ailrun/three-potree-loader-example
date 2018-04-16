@@ -46,10 +46,10 @@ function load(config, potree, afterLoad) {
   potree.loadPointCloud(config.cloudjs, config.makeURL)
     .then((pco) => {
       pco.toTreeNode(pco.root);
+      afterLoad(pco);
 
       return pco;
     })
-    .then(afterLoad)
     .catch((err) => {
       console.error(err);
     });
