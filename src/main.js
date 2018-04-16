@@ -20,6 +20,12 @@ function main() {
   const renderer = new THREE.WebGLRenderer();
   const camera = new THREE.PerspectiveCamera(50, NaN, 0.001, 100000);
   const orbitControls = new OrbitControls(camera, el);
+  orbitControls.mouseButtons = {
+    ORBIT: THREE.MOUSE.RIGHT,
+    ZOOM: THREE.MOUSE.MIDDLE,
+    PAN: THREE.MOUSE.LEFT,
+  };
+  orbitControls.panningMode = OrbitControls.HorizontalPanning;
   const scene = new THREE.Scene();
 
   updateSize(renderer, camera, el);
