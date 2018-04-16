@@ -3,6 +3,8 @@ import * as threePotree from '@pix4d/three-potree-loader';
 
 import { OrbitControls } from './lib/orbitControls';
 
+import { fitCameraToPCO } from './fitCameraToPCO';
+
 const serverConfig = {
   cloudjs: 'cloud.js',
   makeURL(path) {
@@ -16,7 +18,7 @@ function main() {
   const el = document.getElementById('target');
 
   const renderer = new THREE.WebGLRenderer();
-  const camera = new THREE.PerspectiveCamera(90, NaN, 0.001, 100000);
+  const camera = new THREE.PerspectiveCamera(50, NaN, 0.001, 100000);
   const orbitControls = new OrbitControls(camera, el);
   const scene = new THREE.Scene();
 
@@ -31,11 +33,12 @@ function main() {
   const potree = new threePotree.Potree();
 
   load(serverConfig, potree, (pco) => {
-    camera.position.copy(pco.boundingBox.getCenter());
+    // Set position to a point far from (0, 0, 0)
+    camera.position.set(50, 50, 50);
     // Set valid direction of 'sky'
     camera.up = new THREE.Vector3(0, 0, 1);
-    camera.lookAt(scene.position);
-    orbitControls.update();
+    fitCameraToPCO(scene, camera, pco, 1.1, orbitControls);
+
     scene.add(pco);
 
     render(renderer, scene, camera, potree, pco);
@@ -45,7 +48,8 @@ function main() {
 function load(config, potree, afterLoad) {
   potree.loadPointCloud(config.cloudjs, config.makeURL)
     .then((pco) => {
-      pco.toTreeNode(pco.root);
+      pco.position.set(0, 0, 0);
+      pco.updateMatrixWorld(true);
       afterLoad(pco);
 
       return pco;
