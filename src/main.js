@@ -45,7 +45,6 @@ function main() {
 function load(config, potree, afterLoad) {
   potree.loadPointCloud(config.cloudjs, config.makeURL)
     .then((pco) => {
-      pco.material = new threePotree.PointCloudMaterial();
       pco.toTreeNode(pco.root);
 
       return pco;
