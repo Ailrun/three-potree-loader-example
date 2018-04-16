@@ -9,6 +9,7 @@ const serverConfig = {
   cloudjs: 'cloud.js',
   makeURL(path) {
     return `http://localhost:4000/${path}`;
+    // return `https://cdn.rawgit.com/potree/potree/develop/pointclouds/lion_takanawa/${path}`;
   },
 };
 
